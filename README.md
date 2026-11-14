@@ -17,7 +17,7 @@ The scripts generate CSV tables in `results/` and figures in `figures/`. The sec
 
 ## Historical note
 
-This project was originally completed in **2021**. The [original 2021 report](reports/original_2021.pdf) is included unchanged for historical comparison. In 2026, the code and statistical analysis were revisited to correct errors, add survey-weighted results and uncertainty estimates, and expand the paper to include educational attainment. The revised calculations use the publicly available 2019 SIPP dataset, which has been updated since 2021; numerical results may therefore differ from the original report.
+This project was originally completed in **2021**. The [original 2021 report](reports/original_2021.pdf) is included for historical comparison. In 2026, the code and statistical analysis were revisited to correct errors, add survey-weighted results and uncertainty estimates, and expand the paper to include educational attainment. The revised calculations use the publicly available 2019 SIPP dataset, which has been updated since 2021; numerical results may therefore differ from the original report.
 
 ## AI disclosure
 
