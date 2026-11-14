@@ -1,0 +1,183 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1.02in]{geometry}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,longtable}
+\usepackage{fancyhdr,titlesec,hyperref}
+\usepackage{fvextra}
+\hypersetup{hidelinks}
+\emergencystretch=2em
+\titleformat{\section}{\normalfont\sffamily\bfseries\large}{\thesection.}{0.8em}{}
+\titlespacing*{\section}{0pt}{16pt}{9pt}
+\setlength{\parindent}{1.35em}
+\setlength{\parskip}{0pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\thepage\quad Deven Gill}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{first}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}}
+\newcommand{\figureblock}[2]{\begin{center}\includegraphics[width=#1\linewidth]{../figures/#2}\end{center}}
+\begin{document}
+\thispagestyle{first}
+{\sffamily\bfseries\large Personal Networth in the U.S.}\par\vspace{12pt}
+{\sffamily Deven Gill}\par\vspace{16pt}
+\noindent\textbf{Summary.} The role of this paper is to offer statistical analysis of personal net worth in the United States. The influence of age, sex, race, and education will be of pertinent interest; hence, several types of analysis will be run on each variable in order to infer the relationship between the variable and personal net worth. Each variable will be considered in its own section, and results will be discussed thereafter.
+
+\section{Introduction}
+Data was taken from the 2019 Survey of Income and Program Participation (SIPP): the SIPP releases data every year on topics such as Adult Well-Being, Assets, Child Care, Education, Education Enrollment, Income, Demographics, and more. The below analysis will be concerned only with the metric of personal net worth, as stated before, which appears in the raw data files as \texttt{TNETWORTH}. The files can be found at the Census Bureau's 2019 SIPP data page [1]. The data was loaded into R using the packages \texttt{data.table} and \texttt{survey}.
+
+The analysis uses one December observation per eligible individual aged 15 or older. Valid negative and zero net-worth observations were retained. Both unweighted and survey-weighted statistics were calculated; design-adjusted confidence intervals and tests use the SIPP replicate weights [3].
+
+\section{Age}
+Preliminary statistics such as mean age, median age, and sample standard deviation of age were calculated using basic functions in R.
+
+Additionally, a linear regression was run to determine the relationship between age and personal net worth, shown in the below plot.
+\figureblock{0.85}{age_individual.png}
+
+The correlation was rather weak. This is somewhat expected due to the large variance seen regardless of age within the data; however, amongst populations grouped by decade, the number of decades lived explains approximately 88.44\% of the variation in mean personal net worth, as measured by $R^2=0.8844$. To obtain this regression, the ages of survey participants were rounded down to the highest number of complete decades they had lived. After running linear regression on the average net worth by decade, 95\% confidence intervals were produced for the fitted regression values at each age range.
+
+\figureblock{0.79}{age_decades.png}
+\begin{center}\small
+\begin{tabular}{rrrr}
+\toprule
+Decades & Fit & Lower & Upper \\
+\midrule
+
+2 & 0.546 & -0.584 & 1.675 \\
+3 & 1.300 & 0.414 & 2.186 \\
+4 & 2.054 & 1.353 & 2.754 \\
+5 & 2.808 & 2.181 & 3.434 \\
+6 & 3.561 & 2.861 & 4.262 \\
+7 & 4.315 & 3.429 & 5.201 \\
+8 & 5.069 & 3.940 & 6.199 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent\smallskip\noindent\small The fitted values and 95\% confidence limits are in units of \$100,000.\normalsize
+
+Separate survey-design-adjusted 95\% confidence intervals were produced for the mean personal net worth within each decade. These are distinct from the regression confidence intervals above.
+\begin{center}\small
+\begin{tabular}{rrrr}
+\toprule
+Decades & Weighted mean (\$) & Lower (\$) & Upper (\$) \\
+\midrule
+
+2 & 19,262 & 13,220 & 25,304 \\
+3 & 108,404 & 92,729 & 124,078 \\
+4 & 214,698 & 191,434 & 237,962 \\
+5 & 351,686 & 319,316 & 384,056 \\
+6 & 454,817 & 424,559 & 485,075 \\
+7 & 502,626 & 468,331 & 536,922 \\
+8 & 411,266 & 371,761 & 450,772 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Race}
+The median individual net worth of an individual was estimated from the sample. This was done by converting the recorded numeric race variable (\texttt{TRACE}) into a factor which was then used to separate the data into distinct racial groups. A bar plot summarizes the findings of the analysis: for reference, WB and WA encode the racial categories White-Black and White-Asian respectively as named and defined by SIPP.
+\figureblock{0.87}{race_medians.png}
+\begin{center}\small
+\begin{tabular}{lrrr}
+\toprule
+Race & $n$ & Unweighted median (\$) & Weighted median (\$) \\
+\midrule
+
+White & 32,896 & 49,845 & 34,820 \\
+Black & 4,281 & 2,105 & 1,000 \\
+AIAN & 431 & 2,800 & 1,060 \\
+Asian & 2,109 & 23,000 & 21,850 \\
+WB & 174 & 1,440 & 1,480 \\
+WA & 146 & 6,755 & 5,900 \\
+Other & 132 & 3,178 & 2,000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The median values differ between the racial categories, with particularly large differences between the White and Asian categories and several other groups. Both unweighted and survey-weighted estimates are provided for comparison.
+
+\section{Sex}
+Data was also broke into sex categories, particularly male and female. Pie charts show the relative break up of surveyed individuals by sex in various net-worth ranges. Additionally, the mean and standard deviation for both men and women were calculated in order to determine relative variance. Both sexes were tested to see if personal net worth is normally distributed within each sex, for which the answer seemed to be only weakly.
+
+
+A difference of \$99,232.21 was found between the sexes. Since the ratio of the standard deviations was relatively close to one and the sample size was rather large, a pooled $t$-test was used in order to see if the difference was statistically significant. The calculated test result was $t\approx 12.155$, producing a two-sided $p$-value below $10^{-13}$. Although the central limit theorem gives an asymptotic justification under suitable assumptions, the heavy-tailed nature of the net-worth distributions may slow convergence to normality. Consequently, the result of this test must be taken with some caution.
+
+
+\begin{center}\small
+\begin{tabular}{lrr}
+\toprule
+Sex & Unweighted mean (\$) & Survey-weighted mean (\$) \\
+\midrule
+
+Male & 310,544 & 287,172 \\
+Female & 211,312 & 193,087 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The survey-design-adjusted comparison gave a test statistic of 11.267 in absolute value, with $p=7.02e-24$. This also indicates a statistically significant difference in mean personal net worth between the two groups.
+
+
+After this, pie charts were created to display the relative frequency of distribution of net worths by sex within certain net worth ranges. The categories are cumulative: below $-\$30,000$, below \$0, above \$200,000, and above \$800,000. Both unweighted and weighted proportions are shown.
+\figureblock{0.99}{sex_thresholds_combined.png}
+
+\section{Education}
+The median individual net worth of an individual was also estimated from the sample with respect to education. This was done by using the recorded numeric educational attainment variable (\texttt{EEDUC}) to separate the data into distinct educational groups. A bar plot summarizes the unweighted and survey-weighted median net worth for each category.
+\figureblock{0.96}{education_medians_labeled.png}
+
+The highest survey-weighted median in these data was observed for holders of a professional school degree (\$293,340), followed by doctorate degree holders (\$246,490). Among bachelor's degree holders, the weighted median was \$91,890. These are descriptive comparisons, and differences in age and other characteristics may also contribute to the observed relationship.
+
+
+\section{Discussion}
+The overall results are summarized as follows:
+
+With regard to age, although the relationship between age and personal networth is rather low overall in the general population, it was found that age was strongly related to the average personal networth by number of decades lived. Furthermore, a linear model is presented with 95\% confidence intervals for the fitted values at each decade. Survey-adjusted confidence intervals are also presented for the mean net worth in each age group.
+
+With regard to race, it was found that the median personal networth of Whites and Asians eclipses all other racial categories. This suggests that racial categories are strongly associated with differences in median personal networth. The survey-weighted calculations exhibit a similar pattern.
+
+With regard to sex, it was found that neither sample was approximately normally distributed. Additionally, it was found that, under the assumptions of a $t$-test, the difference between the means was statistically significant; however, due to the heavy-tailed nature of the populations, the result of this test must be taken with caution. Finally, pie charts display relative sex distribution with regard to personal networth distribution. The overall trend being that females make up the majority of low personal networth individuals, and males make up the majority of high personal networth individuals.
+
+With regard to education, it was found that median personal networth differed substantially among educational groups. The highest medians were observed among several of the more advanced degree categories, although the comparison does not establish a causal relationship.
+
+\section*{References}
+\begingroup\sloppy
+\begin{enumerate}
+\item US Census Bureau, \emph{2019 SIPP Data}, \url{https://www.census.gov/programs-surveys/sipp/data/datasets/2019-data/2019.html}.
+\item US Census Bureau, \emph{2019 SIPP Data Dictionary}, \url{https://www2.census.gov/programs-surveys/sipp/tech-documentation/data-dictionaries/2019/2019_SIPP_Data_Dictionary.pdf}.
+\item US Census Bureau, \emph{2019 SIPP Users' Guide}, \url{https://www2.census.gov/programs-surveys/sipp/tech-documentation/methodology/2019_SIPP_Users_Guide_SEP23.pdf}.
+\end{enumerate}\endgroup
+
+\section*{R Code}
+The calculations and figures were produced using the accompanying R scripts. The primary calculations follow the commands below; the additional survey-design-adjusted calculations use 240 SIPP replicate weights with Fay's method.
+\begin{Verbatim}[fontsize=\scriptsize,breaklines=true]
+# Import and select one December observation per eligible person
+pu <- fread("data/pu2019.csv.gz", sep = "|", select = cols)
+du <- pu[pu$MONTHCODE == 12 & pu$TAGE_EHC >= 15 &
+         !is.na(pu$TNETWORTH) & pu$WPFINWGT > 0, ]
+
+# Age: original linear regression with corrected scale
+fit_age <- lm(du$TNETWORTH/100000 ~ du$TAGE_EHC)
+plot(du$TNETWORTH/100000 ~ du$TAGE_EHC)
+abline(fit_age)
+
+# Group means and fitted regression confidence limits
+agegroups <- split(du, floor(du$TAGE_EHC/10))
+decades <- 2:8
+meansagegroup <- sapply(as.character(decades), function(k)
+  mean(agegroups[[k]]$TNETWORTH, na.rm = TRUE))
+fit_bydec <- lm(meansagegroup/100000 ~ decades)
+predict(fit_bydec, data.frame(decades = decades),
+        interval = "confidence", level = .95)
+
+# Race, using actual Census codes rather than factor positions
+racebreakup <- split(du, factor(du$TRACE))
+White <- racebreakup[["1"]]
+Black <- racebreakup[["2"]]
+median(White$TNETWORTH, na.rm = TRUE)
+median(Black$TNETWORTH, na.rm = TRUE)
+
+# Sex: two-sided pooled t-test
+X <- split(du, factor(du$ESEX, levels = c(1,2),
+                      labels = c("Male", "Female")))
+male <- X[["Male"]]; female <- X[["Female"]]
+# The full pooled t-test and cumulative pie charts are in analysis.R.
+\end{Verbatim}
+\end{document}
+
