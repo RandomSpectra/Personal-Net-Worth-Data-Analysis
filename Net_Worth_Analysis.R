@@ -17,7 +17,6 @@ pu <- fread("data/pu2019.csv.gz", sep = "|", select = cols,
             colClasses = list(character = "SSUID"))
 
 # December only, one observation per person; net worth applies to ages 15+.
-# Do not exclude zero, negative, or very high net worth.
 du <- pu[pu$MONTHCODE == 12 & pu$TAGE_EHC >= 15 &
          !is.na(pu$TNETWORTH) & is.finite(pu$TNETWORTH) &
          !is.na(pu$WPFINWGT) & pu$WPFINWGT > 0, ]
@@ -32,8 +31,7 @@ du$ESEX <- factor(du$ESEX, levels = c(1, 2),
                   labels = c("Male", "Female"))
 du$TRACE <- factor(du$TRACE)
 
-# A weighted median is the first observed value whose cumulative weight
-# reaches at least half the total weight.
+# We define a weighted median function
 weighted_median <- function(x, w) {
   keep <- !is.na(x) & !is.na(w) & w > 0
   x <- x[keep]; w <- w[keep]
@@ -55,12 +53,11 @@ print(cor(du$TAGE_EHC, du$TNETWORTH, use = "complete.obs"))
 png("figures/age_individual.png", width = 1000, height = 650)
 plot(du$TNETWORTH/100000 ~ du$TAGE_EHC,
      xlab = "Age", ylab = "Net Worth in $100,000", pch = 20, cex = .3)
-abline(fit_age, col = "red", lwd = 2)   # corrected divisor: 100000
+abline(fit_age, col = "red", lwd = 2)   
  dev.off()
 
 du$decades <- floor(du$TAGE_EHC/10)
 agegroups <- split(du, du$decades)
-# The original paper fits decades 2 through 8, not all available ages.
 decades <- 2:8
 meansagegroup <- sapply(as.character(decades), function(k)
   mean(agegroups[[k]]$TNETWORTH, na.rm = TRUE))
@@ -124,7 +121,7 @@ i <- sum(!is.na(male$TNETWORTH)); j <- sum(!is.na(female$TNETWORTH))
 diff <- malemean - femalemean
 pooledvariance <- ((i-1)*malevar + (j-1)*femalevar)/(i+j-2)
 test_statistic <- diff/sqrt(pooledvariance*(1/i + 1/j))
-p_value <- 2*pt(-abs(test_statistic), df = i+j-2) # two-sided
+p_value <- 2*pt(-abs(test_statistic), df = i+j-2) 
 
 sex_table <- data.frame(sex = c("Male", "Female"),
                         n = c(i, j), mean = c(malemean, femalemean),
@@ -162,7 +159,6 @@ for (k in seq_along(subsets)) {
 write.csv(sex_proportions, "results/sex_thresholds.csv", row.names = FALSE)
 
 # Education ----------------------------------------------------------------
-# Codes are retained as codes until we verify the 2019 EEDUC label definitions.
 educgroups <- split(du, du$EEDUC)
 educcodes <- names(educgroups)
 medianbyeduc <- sapply(educgroups, function(g)
