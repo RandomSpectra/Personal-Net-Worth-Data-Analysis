@@ -21,4 +21,4 @@ This project was originally completed in **2021**. The [original 2021 report](re
 
 ## AI disclosure
 
-The decision to extend the 2021 analysis with survey weighting and Fay's replicate-weight inference arose from a discussion of the project with **OpenAI's GPT-6** in 2026. GPT-6 assisted with the R implementation of those survey-weighted changes and with revisions to the code and paper. The original 2021 analysis predates this assistance. The revised scripts were run on the Census data, and their generated outputs were used for the updated report.
+The decision to extend the 2021 analysis with survey weighting and Fay's replicate-weight inference arose from a discussion of the project with **OpenAI's GPT-6** in 2026. The original 2021 analysis predates this assistance. The revised scripts were run on the Census data, and their generated outputs were used for the updated report.
