@@ -1,5 +1,3 @@
-# Personal Networth in the U.S.
-# Revised analysis of the 2021 project, retaining the original R style.
 # Run this file first. Run survey_inference.R afterwards for design-adjusted tests.
 
 packages <- c("data.table", "R.utils")
