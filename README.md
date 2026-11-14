@@ -2,7 +2,7 @@
 
 An analysis of personal net worth using the U.S. Census Bureau's 2019 Survey of Income and Program Participation (SIPP). The study examines relationships with age, race, sex, and educational attainment using R. The revised analysis presents both unweighted and survey-weighted estimates, as well as survey-design-adjusted inference for age and sex comparisons.
 
-The [revised paper](reports/Personal_Networth_Final.pdf) contains the results and discussion. Its [LaTeX source](reports/Personal_Networth_Final.tex) is also included.
+The [revised paper](reports/Personal_Networth_Final.pdf) contains the results and discussion.
 
 ## Reproducing the analysis
 
